@@ -1,0 +1,17 @@
+{
+  "apiVersion": 2,
+  "name": "my-custom-block/spacer",
+  "title": "Spacer",
+  "category": "layout",
+  "icon": "editor-spacer",
+  "description": "選択した高さのスペーサーを挿入します。",
+  "attributes": {
+    "size": {
+      "type": "number",
+      "default": 24
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css"
+}

@@ -1,0 +1,10 @@
+.c-btn {
+  display: flex;
+  .touch-is-active &.touched,
+  .mouse-is-active &:hover,
+  &:focus-visible {
+    &::before {
+      opacity: 1;
+    }
+  }
+}

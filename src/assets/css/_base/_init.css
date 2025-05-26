@@ -1,0 +1,22 @@
+html {
+  font-optical-sizing: auto;
+  font-weight: var(--font-weight-normal);
+  background-color: var(--color-offwhite);
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: unset;
+  @media only screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  background-color: var(--color-offwhite);
+  font-size: calc(100 / 390 * 10vw);
+  @media (--media-tablet) {
+    font-size: 91%;
+  }
+  @media (--media-pc) {
+    font-size: calc(100 / 1440 * 10vw);
+  }
+  @media (--media-widescreen) {
+    font-size: 62.5%;
+  }
+}

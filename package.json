@@ -1,0 +1,53 @@
+{
+  "type": "module",
+  "scripts": {
+    "generate-theme-env": "node scripts/generate-theme-env.js",
+    "generate-vite-server": "node scripts/generate-vite-server.js",
+    "img:gen": "node scripts/generate-images.js",
+    "img:watch": "node scripts/watch-images.js",
+    "lint:php": "markuplint \"**/*.{php}\" --problem-only",
+    "lint:watch": "onchange \"**/*.{php}\" -- npm run lint:php",
+    "wp:start": "wp-env start && wp-env run cli wp theme activate development",
+    "serve": "vite",
+    "theme:dev": "npm run generate-theme-env -- --dev && npm run generate-vite-server && npm run img:gen && concurrently \"npm:img:watch\" \"npm:lint:watch\" \"npm:wp:start\" \"npm:serve\"",
+    "theme:build": "npm run generate-theme-env -- --prod && npm run img:gen && vite build",
+    "plugin:dev": "vite --config wp/plugins/my-custom-block/vite.plugin.config.js",
+    "plugin:build": "vite build --config wp/plugins/my-custom-block/vite.plugin.config.js",
+    "dev": "concurrently \"npm run theme:dev\" \"npm run plugin:dev\"",
+    "build": "npm run theme:build && npm run plugin:build",
+    "preview": "wp-env start && wp-env run cli wp theme activate production && vite preview",
+    "stop": "npm run wp:stop",
+    "destroy": "npm run wp:destroy",
+    "wp:stop": "wp-env stop",
+    "wp:destroy": "wp-env stop && wp-env destroy",
+    "wp:update": "wp-env start --update",
+    "wp:reset": "wp-env stop && wp-env clean",
+    "wp:import": "wp-env run cli wp db import sql/wpenv.sql",
+    "wp:export": "wp-env run cli wp db export sql/wpenv.sql"
+  },
+  "devDependencies": {
+    "@markuplint/mustache-parser": "^4.6.19",
+    "@markuplint/php-parser": "^4.6.19",
+    "@rollup/pluginutils": "^5.1.4",
+    "@vitejs/plugin-react": "^4.5.0",
+    "@wordpress/env": "^10.23.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.27.0",
+    "imagemin": "^9.0.1",
+    "imagemin-avif": "^0.1.6",
+    "imagemin-cli": "^8.0.0",
+    "imagemin-webp": "^8.0.0",
+    "markuplint": "^4.12.0",
+    "onchange": "^7.1.0",
+    "postcss-preset-env": "^10.1.6",
+    "sharp": "^0.34.2",
+    "vite": "^6.3.5",
+    "vite-plugin-browser-sync": "^4.0.0",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-static-copy": "^3.0.0"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
+    "tailwindcss": "^4.1.7"
+  }
+}

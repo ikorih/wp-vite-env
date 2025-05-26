@@ -1,0 +1,9 @@
+/* エディター上での見た目 */
+.c-spacer {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.c-spacer[class*='-h-'] {
+  /* 高さはユーティリティクラスで制御 */
+}

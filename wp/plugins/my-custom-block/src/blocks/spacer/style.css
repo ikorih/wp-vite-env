@@ -1,0 +1,30 @@
+/* フロントエンド用スタイル */
+.c-spacer {
+  display: block;
+  width: 100%;
+}
+
+.c-spacer.-h-8 {
+  height: 8px;
+}
+.c-spacer.-h-24 {
+  height: 24px;
+}
+.c-spacer.-h-40 {
+  height: 40px;
+}
+.c-spacer.-h-64 {
+  height: 64px;
+}
+.c-spacer.-h-80 {
+  height: 80px;
+}
+.c-spacer.-h-120 {
+  height: 120px;
+}
+.c-spacer.-h-160 {
+  height: 160px;
+}
+.c-spacer.-h-200 {
+  height: 200px;
+}
