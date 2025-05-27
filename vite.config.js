@@ -119,6 +119,7 @@ export default defineConfig({
     host: true,
     strictPort: true, // error if port busy
     port: 5173, // your plugin dev port
+    cors: true,
   },
 
   css: {
