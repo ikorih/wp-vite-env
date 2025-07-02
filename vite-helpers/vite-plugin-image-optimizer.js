@@ -40,7 +40,9 @@ export default function imageOptimizerPlugin(options = {}) {
   async function optimizeFile(relPath) {
     const ext = path.extname(relPath);
     const func = extToFunction[ext];
-    if (!func) return;
+    if (!func) {
+      return;
+    }
     const absPath = path.resolve(outputDir, relPath);
     const buffer = await fs.readFile(absPath);
     await sharp(buffer)
@@ -50,14 +52,18 @@ export default function imageOptimizerPlugin(options = {}) {
 
   async function generateFormats(relPath) {
     const ext = path.extname(relPath);
-    if (!generate.inputExts.includes(ext)) return;
+    if (!generate.inputExts.includes(ext)) {
+      return;
+    }
     const basename = relPath.slice(0, -ext.length);
     const absInput = path.resolve(outputDir, relPath);
     const buffer = await fs.readFile(absInput);
 
     for (const outExt of generate.outputExts) {
       const func = extToFunction[outExt];
-      if (!func) continue;
+      if (!func) {
+        continue;
+      }
       const absOutput = path.resolve(outputDir, basename + outExt);
       await sharp(buffer)
         [func](extToOptions[outExt] || {})
@@ -73,8 +79,14 @@ export default function imageOptimizerPlugin(options = {}) {
 
       for (const absPath of files) {
         const relPath = path.relative(outputDir, absPath);
+        console.log(`[imageOptimizer] Processing: ${relPath}`);
         await optimizeFile(relPath);
-        await generateFormats(relPath);
+        console.log(`[imageOptimizer] Optimized: ${relPath}`);
+        // フォーマット生成設定が空でなければのみ呼び出し＆ログ出力
+        if (generate.inputExts.length > 0 && generate.outputExts.length > 0) {
+          await generateFormats(relPath);
+          console.log(`[imageOptimizer] Formats generated for: ${relPath}`);
+        }
       }
     },
   };

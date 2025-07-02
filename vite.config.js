@@ -59,9 +59,10 @@ export default defineConfig({
     VitePluginBrowserSync({
       dev: {
         bs: {
-          proxy: 'http://localhost:8000', // wp-env の WordPress 本体
+          proxy: 'http://localhost:8000', // Docker Compose の WordPress 本体
           port: 3000, // BrowserSync を 3030 で起動
           ui: { port: 3001 }, // （任意）UI ポート
+          open: 'external', // ブラウザを自動で開く
           files: [
             // 変更を監視して自動リロード
             'src/**/*.php',
@@ -125,7 +126,13 @@ export default defineConfig({
   css: {
     devSourcemap: true,
     postcss: {
-      plugins: [postcssPresetEnv()],
+      plugins: [
+        postcssPresetEnv({
+          features: {
+            'cascade-layers': false,
+          },
+        }),
+      ],
     },
   },
 });

@@ -30,8 +30,12 @@ src/assets/avif
 # 不要なwpプラグイン
 wp/plugins/index.php
 wp/plugins/hello.php
+wp/plugins/akismet
 
 # 自動生成されるViteサーバー定義
 /src/config/vite-server-config.php
 /src/config/theme-env.php
 
+
+// 環境設定ファイル
+.env

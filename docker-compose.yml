@@ -1,0 +1,110 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: '${PRODUCTION_NAME}_db'
+    environment:
+      MYSQL_DATABASE: '${MYSQL_NAME}'
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_PASSWORD: '${MYSQL_PASS}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASS}'
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/mysql:/docker-entrypoint-initdb.d
+    ports:
+      - '${LOCAL_SERVER_IP}:${LOCAL_DB_PORT}:3306'
+    restart: 'on-failure:5'
+
+  wordpress:
+    image: wordpress:latest
+    container_name: '${PRODUCTION_NAME}_wp'
+    depends_on:
+      - database
+    environment:
+      WORDPRESS_DB_HOST: database:${LOCAL_DB_PORT}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASS}
+      WORDPRESS_DB_NAME: ${MYSQL_NAME}
+      WORDPRESS_DEBUG: '${WORDPRESS_DEBUG}'
+      WP_MEMORY_LIMIT: '${WP_MEMORY_LIMIT}'
+      WP_MAX_UPLOAD_SIZE: '${WP_MAX_UPLOAD_SIZE}'
+    volumes:
+      - wordpress_core:/var/www/html
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./${THEME_SOURCE}:/var/www/html/wp-content/themes/${PRODUCTION_NAME}:delegated
+      - ./wp/uploads:/var/www/html/wp-content/uploads:delegated
+      - ./wp/plugins:/var/www/html/wp-content/plugins:delegated
+    ports:
+      - '${LOCAL_SERVER_IP}:${LOCAL_SERVER_PORT}:80'
+    restart: 'on-failure:5'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: '${PRODUCTION_NAME}_phpmyadmin'
+    depends_on:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_USER: '${MYSQL_USER}'
+      PMA_PASSWORD: '${MYSQL_PASS}'
+    ports:
+      - '${PMA_PORT}:80'
+
+  cli:
+    tty: true
+    image: wordpress:cli
+    container_name: '${PRODUCTION_NAME}_cli'
+    depends_on:
+      - wordpress
+      - database
+    volumes:
+      - wordpress_core:/var/www/html:delegated
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./${THEME_SOURCE}:/var/www/html/wp-content/themes/${PRODUCTION_NAME}:delegated
+      - ./wp/uploads:/var/www/html/wp-content/uploads:delegated
+      - ./wp/plugins:/var/www/html/wp-content/plugins:delegated
+    command: >
+      /bin/sh -c '
+      sleep 10;
+      wp language core install ja --activate --allow-root;
+      wp option update timezone_string "Asia/Tokyo" --allow-root;
+      '
+    environment:
+      WORDPRESS_DB_HOST: database:${LOCAL_DB_PORT}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASS}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_NAME: ${MYSQL_NAME}
+
+  wordmove:
+    tty: true
+    depends_on:
+      - wordpress
+    image: welaika/wordmove
+    container_name: '${PRODUCTION_NAME}_wordmove'
+    working_dir: /home
+    volumes:
+      - ./config:/home/
+      - wordpress_core:/var/www/html
+      - ./${THEME_SOURCE}:/var/www/html/wp-content/themes/${PRODUCTION_NAME}:delegated
+      - ./wp/uploads:/var/www/html/wp-content/uploads:delegated
+      - ./wp/plugins:/var/www/html/wp-content/plugins:delegated
+      - ~/.ssh:/root/.ssh
+    environment:
+      RUBYOPT: -EUTF-8
+      LOCAL_SERVER_PORT: '${LOCAL_SERVER_PORT}'
+      LOCAL_DB_NAME: '${MYSQL_NAME}'
+      LOCAL_DB_ROOT_PASS: '${MYSQL_ROOT_PASS}'
+      WP_REMOTE_URL: '${WP_REMOTE_URL}'
+      WD_REMOTE_CONTENT_PATH: '${WD_REMOTE_CONTENT_PATH}'
+      WD_REMOTE_DB_NAME: '${WD_REMOTE_DB_NAME}'
+      WD_REMOTE_DB_USER: '${WD_REMOTE_DB_USER}'
+      WD_REMOTE_DB_PASS: '${WD_REMOTE_DB_PASS}'
+      WD_REMOTE_DB_HOST: '${WD_REMOTE_DB_HOST}'
+      WD_REMOTE_DB_PORT: '${WD_REMOTE_DB_PORT}'
+      WD_REMOTE_HOST: '${WD_REMOTE_HOST}'
+      WD_REMOTE_SSH_USER: '${WD_REMOTE_SSH_USER}'
+      WD_REMOTE_SSH_PORT: '${WD_REMOTE_SSH_PORT}'
+    restart: 'on-failure:5'
+
+volumes:
+  db_data:
+  wordpress_core:

@@ -1,0 +1,56 @@
+# -------------------------------------------
+# wordpress・mysqlコンテナの設定
+# -------------------------------------------
+
+# プロジェクト名（テーマ名）
+PRODUCTION_NAME=my_project
+
+# 開発ディレクトリ
+THEME_SOURCE=src
+
+LOCAL_SERVER_IP=127.0.0.1
+LOCAL_SERVER_PORT=8000
+LOCAL_DB_PORT=3306
+
+# WordPress Database
+MYSQL_USER=wordpress
+MYSQL_NAME=wordpress
+MYSQL_PASS=wordpress
+MYSQL_ROOT_PASS=wordpress
+
+# WordPress
+WORDPRESS_DEBUG=true
+WP_MEMORY_LIMIT=256M
+WP_MAX_UPLOAD_SIZE=128M
+
+# WordPress User
+ADMIN_USER=admin
+ADMIN_PASS=admin
+ADMIN_EMAIL=hello@example.com
+
+# phpMyAdmin
+PMA_PORT=8080
+
+# -------------------------------------------
+# wordmoveコンテナの設定
+# -------------------------------------------
+# URL
+WP_REMOTE_URL=https://xxxxxxxxxx.com
+# wordpressのディレクトリの絶対パス
+WD_REMOTE_CONTENT_PATH=/xxxxxxxxxxx/xxxxxxxxxxx
+# DB名
+WD_REMOTE_DB_NAME=xxxxxxxxxxx
+# DBのユーザー名
+WD_REMOTE_DB_USER=xxxxxxxxxxx
+# DBのパスワード
+WD_REMOTE_DB_PASS=xxxxxxxxxxx
+# DBのホスト名
+WD_REMOTE_DB_HOST=localhost
+# DBの接続ポート
+WD_REMOTE_DB_HOST=3306
+# SSHホスト名
+WD_REMOTE_HOST=xxxxxxxxxx.server.com
+# SSHユーザー名
+WD_REMOTE_SSH_USER=xxxxxxxxxx
+# SSHポート名
+WD_REMOTE_SSH_PORT=22

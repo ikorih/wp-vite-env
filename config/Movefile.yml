@@ -1,0 +1,52 @@
+global:
+  sql_adapter: default
+
+local:
+  vhost: "http://localhost:<%= ENV['LOCAL_SERVER_PORT'] %>"
+  wordpress_path: '/var/www/html/'
+  database:
+    name: "<%= ENV['LOCAL_DB_NAME'] %>"
+    user: 'root'
+    password: "<%= ENV['LOCAL_DB_ROOT_PASS'] %>"
+    host: 'database'
+
+production:
+  vhost: "<%= ENV['WP_REMOTE_URL'] %>"
+  wordpress_path: "<%= ENV['WD_REMOTE_CONTENT_PATH'] %>"
+
+  database:
+    name: "<%= ENV['WD_REMOTE_DB_NAME'] %>"
+    user: "<%= ENV['WD_REMOTE_DB_USER'] %>"
+    password: "<%= ENV['WD_REMOTE_DB_PASS'] %>"
+    host: "<%= ENV['WD_REMOTE_DB_HOST'] %>"
+    # port: "<%= ENV['PRODUCTION_DB_PORT'] %>"
+
+  exclude:
+    - '.git/'
+    - '.gitignore'
+    - '.gitmodules'
+    - '.env'
+    - 'node_modules'
+    - 'bin/'
+    - 'tmp/*'
+    - 'Gemfile*'
+    - 'Movefile'
+    - 'movefile'
+    - 'movefile.yml'
+    - 'movefile.yaml'
+    - 'wp-config.php'
+    - 'wp-config.php'
+    - 'wp-config-sample.php'
+    - 'wp-config-docker.php'
+    - 'wp-content/*.sql.gz'
+    - '*.orig'
+    - 'wp-content/uploads/backwpup*/*'
+    - '.htaccess'
+    - '.htpasswd'
+    - '.DS_Store'
+
+  ssh:
+    host: "<%= ENV['WD_REMOTE_HOST'] %>"
+    user: "<%= ENV['WD_REMOTE_SSH_USER'] %>"
+    port: <%= ENV['WD_REMOTE_SSH_PORT'] %>
+    rsync_options: '--verbose'

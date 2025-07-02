@@ -1,7 +1,7 @@
 <?php
 require_once get_template_directory() . '/theme-config.php';
 
-function vite_enqueue_assets() {
+function enqueue_front_assets() {
   if (THEME_IS_DEV) {
     // 開発モード: Vite Dev Server から読み込み
     add_action('wp_enqueue_scripts', function () {
@@ -17,29 +17,8 @@ function vite_enqueue_assets() {
       return $tag;
     }, 10, 2);
   } else {
-    // 本番環境: manifest.json を読み込んで enqueue
-    add_action('wp_enqueue_scripts', function () {
-      $manifest_path = THEME_DIST_DIR . '/.vite/manifest.json';
-      if (!file_exists($manifest_path)) {
-        return;
-      }
-
-      $manifest = json_decode(file_get_contents($manifest_path), true);
-      $entry = $manifest[THEME_ENTRY_JS] ?? null;
-      if (!$entry) {
-        return;
-      }
-
-      if (!empty($entry['css'])) {
-        foreach ($entry['css'] as $i => $css) {
-          wp_enqueue_style("theme-style-$i", THEME_DIST_URI . '/' . $css, [], null);
-        }
-      }
-
-      if (!empty($entry['file'])) {
-        wp_enqueue_script('theme-main', THEME_DIST_URI . '/' . $entry['file'], [], null, true);
-      }
-    });
+    wp_enqueue_style('theme-style', THEME_DIST_URI . '/' . THEME_ENTRY_CSS, [], VERSION);
+    wp_enqueue_script('theme-main', THEME_DIST_URI . '/' . THEME_ENTRY_JS, [], VERSION, true);
 
     // defer属性を付ける（必要であれば）
     add_filter('script_loader_tag', function ($tag, $handle) {
@@ -51,5 +30,4 @@ function vite_enqueue_assets() {
   }
 }
 
-// init フックに登録（即有効化）
-add_action('init', 'vite_enqueue_assets');
+add_action('wp_enqueue_scripts', 'enqueue_front_assets', 20); // priority を 20 に

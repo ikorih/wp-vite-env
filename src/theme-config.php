@@ -7,10 +7,17 @@ if ( THEME_IS_DEV ) {
   require_once __DIR__ . '/config/vite-server-config.php';
 }
 
-define('THEME_ENTRY_JS', 'assets/js/app.js');
-define('THEME_DIST_DIR', get_template_directory() . '/../dist');
-define('THEME_DIST_URI', get_template_directory_uri() . '/../dist');
 
+define('VERSION','20250702');
+define('THEME_ENTRY_JS', 'assets/js/app.js');
+define('THEME_ENTRY_CSS', 'assets/css/style.css');
+define('THEME_EDITOR_CSS', 'assets/css/editor-style.css');
+define('THEME_DIST_DIR', get_template_directory());
+define('THEME_DIST_URI', get_template_directory_uri());
+
+const MEDIA_QUERIES = [
+  'sp' => 'screen and (max-width: 991px)',
+];
 
 /**
  * アセット URL を返す
