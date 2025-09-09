@@ -4,10 +4,8 @@ require_once get_template_directory() . '/theme-config.php';
 function enqueue_front_assets() {
   if (THEME_IS_DEV) {
     // 開発モード: Vite Dev Server から読み込み
-    add_action('wp_enqueue_scripts', function () {
-      wp_enqueue_script('vite-client', THEME_VITE_SERVER . '/@vite/client', [], null);
-      wp_enqueue_script('vite-main', THEME_VITE_SERVER . '/' . THEME_ENTRY_JS, [], null, true);
-    });
+    wp_enqueue_script('vite-client', THEME_VITE_SERVER . '/@vite/client', [], null);
+    wp_enqueue_script('vite-main', THEME_VITE_SERVER . '/' . THEME_ENTRY_JS, [], null, true);
 
     // <head> に Vite 用の script module を追加（必要に応じて）
     add_filter('script_loader_tag', function ($tag, $handle) {
