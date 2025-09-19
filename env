@@ -47,7 +47,7 @@ WD_REMOTE_DB_PASS=xxxxxxxxxxx
 # DBのホスト名
 WD_REMOTE_DB_HOST=localhost
 # DBの接続ポート
-WD_REMOTE_DB_HOST=3306
+WD_REMOTE_DB_PORT=3306
 # SSHホスト名
 WD_REMOTE_HOST=xxxxxxxxxx.server.com
 # SSHユーザー名
