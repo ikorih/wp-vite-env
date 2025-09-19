@@ -36,7 +36,6 @@ production:
     - 'movefile.yaml'
     - 'wp-config.php'
     - 'wp-config.php'
-    - 'wp-config-sample.php'
     - 'wp-config-docker.php'
     - 'wp-content/*.sql.gz'
     - '*.orig'
