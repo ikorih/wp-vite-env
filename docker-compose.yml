@@ -1,6 +1,10 @@
 services:
   database:
     image: mysql:8.0
+    command:
+      - --default_authentication_plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     container_name: '${PRODUCTION_NAME}_db'
     environment:
       MYSQL_DATABASE: '${MYSQL_NAME}'
