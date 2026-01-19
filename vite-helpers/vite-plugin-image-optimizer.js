@@ -79,13 +79,9 @@ export default function imageOptimizerPlugin(options = {}) {
 
       for (const absPath of files) {
         const relPath = path.relative(outputDir, absPath);
-        console.log(`[imageOptimizer] Processing: ${relPath}`);
         await optimizeFile(relPath);
-        console.log(`[imageOptimizer] Optimized: ${relPath}`);
-        // フォーマット生成設定が空でなければのみ呼び出し＆ログ出力
         if (generate.inputExts.length > 0 && generate.outputExts.length > 0) {
           await generateFormats(relPath);
-          console.log(`[imageOptimizer] Formats generated for: ${relPath}`);
         }
       }
     },

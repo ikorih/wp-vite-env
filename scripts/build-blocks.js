@@ -6,7 +6,7 @@ import path from 'path';
 import chokidar from 'chokidar';
 
 const execAsync = promisify(exec);
-const pluginRoot = 'wp/plugins/my-custom-block';
+const pluginRoot = 'wordpress/wp-content/plugins/my-custom-block';
 const srcBlocks = path.join(pluginRoot, 'src/blocks');
 const outBlocks = path.join(pluginRoot, 'dist/blocks');
 const isWatch = process.argv.includes('--watch');

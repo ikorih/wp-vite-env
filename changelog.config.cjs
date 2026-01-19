@@ -1,67 +1,51 @@
 module.exports = {
   disableEmoji: true,
-  format: '{type}{scope}: {emoji}{subject}',
-  list: ['mod', 'feat', 'fix', 'chore', 'add', 'docs', 'refactor', 'style', 'ci', 'perf', 'test'],
+  format: '{type}{scope}: {subject}',
+  list: ['mod', 'feat', 'fix', 'style', 'markup', 'refactor', 'perf', 'chore', 'add', 'docs'],
   maxMessageLength: 64,
   minMessageLength: 3,
   questions: ['type', 'scope', 'subject', 'body', 'breaking', 'issues', 'lerna'],
-  scopes: ['', 'frontend', 'backend', '開発環境', '設定ファイル'],
+  scopes: ['', 'theme', 'template', 'scss', 'js', 'plugin', 'assets', 'docker', 'gulp'],
   types: {
-    chore: {
-      description: 'ビルドプロセスや補助ツールの変更（例：viteの設定変更）',
-      emoji: '🤖',
-      value: 'chore',
-    },
-    ci: {
-      description:
-        'CI（継続的インテグレーション）関連の変更。これには、ビルドプロセスの自動化、テストの実行、デプロイプロセスの設定、CIサービス（例：GitHub Actions, Travis CI, GitLab CI）の設定ファイルの追加や更新などが含まれます。',
-      emoji: '🎡',
-      value: 'ci',
-    },
-    docs: {
-      description: 'ドキュメントのみの変更（例：README.mdの更新）',
-      emoji: '✏️',
-      value: 'docs',
+    mod: {
+      description: '既存機能の変更・改善',
+      value: 'mod',
     },
     feat: {
-      description: '新しい機能の追加（例：新しいAPIの実装）',
-      emoji: '🎸',
+      description: '新機能の追加',
       value: 'feat',
     },
     fix: {
-      description: 'バグ修正（例：ユーザーインターフェースの不具合修正）',
-      emoji: '🐛',
+      description: 'バグ修正',
       value: 'fix',
     },
-    perf: {
-      description: 'パフォーマンスを向上させるコード変更（例：画像読み込み処理の最適化）',
-      emoji: '⚡️',
-      value: 'perf',
-    },
-    refactor: {
-      description: 'バグ修正や機能追加を含まないコード変更（コード構造の改善など）',
-      emoji: '💡',
-      value: 'refactor',
-    },
     style: {
-      description: 'マークアップ、空白、フォーマット、セミコロンの欠如などのスタイル変更',
-      emoji: '💄',
+      description: 'CSS/SCSSの変更（見た目の調整）',
       value: 'style',
     },
-    test: {
-      description: 'テスト追加（例：新しい機能テストの追加）',
-      emoji: '💍',
-      value: 'test',
+    markup: {
+      description: 'HTML/PHPテンプレートの変更',
+      value: 'markup',
     },
-    mod: {
-      description: '既存の機能やコードの変更や改良（例：ユーザーインターフェイスの微調整）',
-      emoji: '🛠',
-      value: 'mod',
+    refactor: {
+      description: '機能変更を伴わないコード改善',
+      value: 'refactor',
+    },
+    perf: {
+      description: 'パフォーマンス改善',
+      value: 'perf',
+    },
+    chore: {
+      description: 'ビルド設定・開発環境の変更',
+      value: 'chore',
     },
     add: {
-      description: '新しいファイルやリソースの追加（例：画像やフォントファイルの追加）',
-      emoji: '➕',
+      description: 'アセット追加（画像、フォント、動画等）',
       value: 'add',
+    },
+    docs: {
+      description: 'ドキュメントの変更',
+      value: 'docs',
     },
   },
 };

@@ -11,18 +11,29 @@ import { sync as globSync } from 'glob';
  */
 export default function copyStaticPlugin(options = {}) {
   const { targets = [] } = options;
+  let outDir = 'dist';
+  let viteRoot = '';
 
   return {
     name: 'vite-plugin-copy-static',
 
+    // Vite の設定から outDir と root を取得
+    configResolved(config) {
+      outDir = config.build.outDir;
+      viteRoot = config.root;
+    },
+
     async writeBundle() {
-      const root = process.cwd();
-      const dist = process.env.VITE_OUT_DIR || 'dist';
+      // Vite root からの相対パスで outDir が指定されているので、
+      // viteRoot と outDir を結合して絶対パスを取得
+      const absoluteOutDir = path.resolve(viteRoot, outDir);
 
       for (const { src, dest, ignore = [] } of targets) {
         // glob パターンにマッチするファイルを取得（ignore があれば除外）
         const files = globSync(src, { nodir: true, ignore });
-        if (!files.length) continue;
+        if (!files.length) {
+          continue;
+        }
 
         // src にワイルドカードが含まれるか判定
         const hasGlob = src.includes('*');
@@ -34,12 +45,11 @@ export default function copyStaticPlugin(options = {}) {
           // baseDir からの相対パスを取得。
           // 結果が空文字の場合はファイル名を使う
           const rel = path.relative(baseDir, file) || path.basename(file);
-          // dist/<dest>/<rel> へ書き出し
-          const destPath = path.resolve(root, dist, dest, rel);
+          // absoluteOutDir/<dest>/<rel> へ書き出し
+          const destPath = path.resolve(absoluteOutDir, dest, rel);
 
           await fs.mkdir(path.dirname(destPath), { recursive: true });
           await fs.copyFile(file, destPath);
-          this.warn(`Copied static asset: ${file} → ${dest}/${rel}`);
         }
       }
     },

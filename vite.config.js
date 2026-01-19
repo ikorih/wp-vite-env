@@ -2,20 +2,26 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import { globSync } from 'glob';
-import phpHandlerPlugin from './vite-helpers/vite-plugin-php-handler.js';
+import dotenv from 'dotenv';
 import imageOptimizerPlugin from './vite-helpers/vite-plugin-image-optimizer.js';
 import copyStaticPlugin from './vite-helpers/vite-plugin-copy-static.js';
 import eslintPlugin from 'vite-plugin-eslint';
-import VitePluginBrowserSync from 'vite-plugin-browser-sync';
+import fullReload from 'vite-plugin-full-reload';
 
 import tailwindcss from '@tailwindcss/vite';
 
 import postcssPresetEnv from 'postcss-preset-env';
 
+// .env からテーマ名を取得
+dotenv.config();
+const THEME_NAME = process.env.PRODUCTION_NAME || 'theme';
+const OUTPUT_DIR = `../release/${THEME_NAME}`;
+
 // JS と CSS ファイルを動的にエントリに追加
+// キー名はファイル名のみ（パスなし）にして、output設定でパスを指定
 const inputEntries = Object.fromEntries(
   [...globSync('src/assets/js/*.js'), ...globSync('src/assets/css/*.css')].map((file) => [
-    path.relative('src', file).replace(/\.[^.]+$/, ''), // 拡張子なし
+    path.basename(file, path.extname(file)), // ファイル名のみ（拡張子なし）
     path.resolve(__dirname, file),
   ])
 );
@@ -23,22 +29,17 @@ const inputEntries = Object.fromEntries(
 export default defineConfig({
   root: 'src',
   plugins: [
-    phpHandlerPlugin(),
     copyStaticPlugin({
       targets: [
+        { src: 'src/**/*.php', dest: '', ignore: ['**/vite-server-config.php'] },
         { src: 'src/assets/img/**/*', dest: 'assets/img' },
         { src: 'src/assets/webp/**/*', dest: 'assets/webp' },
         { src: 'src/assets/avif/**/*', dest: 'assets/avif' },
         { src: 'src/style.css', dest: '' },
-        {
-          src: 'src/**/*',
-          dest: '',
-          ignore: ['**/*.php', '**/*.{php,jpg,jpeg,gif,png,svg,webp,avif,css,js}'],
-        },
       ],
     }),
     imageOptimizerPlugin({
-      outputDir: path.resolve(__dirname, 'dist'),
+      outputDir: path.resolve(__dirname, OUTPUT_DIR.replace('../', '')),
       supportedExts: ['.jpg', '.jpeg', '.png', '.webp', '.avif'],
       // generateFormats は不要 → 空配列
       generate: { inputExts: [], outputExts: [] },
@@ -56,54 +57,31 @@ export default defineConfig({
       // キャッシュ有効化で 2 回目以降は速い
       cache: true,
     }),
-    VitePluginBrowserSync({
-      dev: {
-        bs: {
-          proxy: 'http://localhost:8000', // Docker Compose の WordPress 本体
-          port: 3000, // BrowserSync を 3030 で起動
-          ui: { port: 3001 }, // （任意）UI ポート
-          open: 'external', // ブラウザを自動で開く
-          files: [
-            // 変更を監視して自動リロード
-            'src/**/*.php',
-            'dist/assets/**/*.{css,js}',
-          ],
-        },
-      },
-    }),
+    fullReload(['src/**/*.php'], { delay: 100 }),
   ],
   base: './',
   publicDir: false,
   build: {
-    outDir: '../dist',
+    outDir: OUTPUT_DIR,
     rollupOptions: {
       input: inputEntries,
       output: {
-        // JS の出力先（関数化して basename だけ使う）
-        entryFileNames: (chunkInfo) => {
-          // chunkInfo.name は "assets/js/app" のような文字列
-          const base = path.basename(chunkInfo.name); // → "app"
-          return `assets/js/${base}.js`;
-        },
-        chunkFileNames: (chunkInfo) => {
-          const base = path.basename(chunkInfo.name);
-          return `assets/js/${base}.js`;
-        },
+        // JS の出力先（ハッシュ付き）
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        chunkFileNames: 'assets/js/[name]-[hash].js',
 
-        // 画像・フォント・CSS などその他アセットは assetFileNames で振り分け
+        // 画像・フォント・CSS などその他アセット（ハッシュ付き）
         assetFileNames: (assetInfo) => {
-          // assetInfo.name か fileName どちらかにオリジナル名が入ります
           const original = assetInfo.name || assetInfo.fileName || '';
           const ext = path.extname(original);
-          const base = path.basename(original); // 例: 'style.css'
 
           // CSS ファイルは css/ フォルダに
           if (ext === '.css') {
-            return `assets/css/${base}`;
+            return 'assets/css/[name]-[hash][extname]';
           }
 
           // その他は assets/ 直下
-          return `assets/${base}`;
+          return 'assets/[name]-[hash][extname]';
         },
       },
     },
@@ -128,9 +106,17 @@ export default defineConfig({
     postcss: {
       plugins: [
         postcssPresetEnv({
+          // Stage 2 以上の機能を有効化（デフォルト）
+          stage: 2,
           features: {
-            'cascade-layers': false,
+            // 使用する機能
+            'custom-media-queries': true, // @custom-media
+            'nesting-rules': true, // CSS Nesting（ブラウザフォールバック用）
+            // 無効化する機能
+            'cascade-layers': false, // Tailwind CSS v4 の @layer と競合するため
           },
+          // browserslist は package.json から自動読み込み
+          autoprefixer: { grid: true },
         }),
       ],
     },

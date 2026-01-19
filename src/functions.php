@@ -1,10 +1,10 @@
 <?php
 
-// vite開発用 : こちらは削除しないでください。
-require_once __DIR__ . '/inc/vite-helper.php';
-
-// 定数管理ファイルを読み込み
+// 定数管理ファイルを読み込み（vite-helper.php より先に読み込む）
 require_once __DIR__ . '/theme-config.php';
+
+// Vite開発用アセット読み込み
+require_once __DIR__ . '/inc/vite-helper.php';
 
 
 /*
@@ -16,8 +16,8 @@ require_once __DIR__ . '/theme-config.php';
 require_once __DIR__ . '/inc/setup.php';
 
 /*
-    lib/gutenberg.php
+    inc/gutenberg.php
 	- editor customize
   - ブロックエディターにカスタムCSSを有効化
 */
-require get_template_directory() . '/inc/gutenberg.php';
+require_once __DIR__ . '/inc/gutenberg.php';
