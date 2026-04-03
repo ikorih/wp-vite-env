@@ -1,0 +1,9 @@
+/* ブレイクポイントの正（single source of truth）
+ * 値を変更する場合は _custom-media.css も同期すること */
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 570px;
+  --breakpoint-pc: 990px;
+  --breakpoint-widescreen: 1440px;
+  --breakpoint-max: 1920px;
+}

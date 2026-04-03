@@ -1,0 +1,5 @@
+@theme {
+  --ease-custom1: cubic-bezier(0, 0.55, 0.45, 1);
+  --ease-custom2: cubic-bezier(0.6, 0, 0.45, 1);
+  --ease-easeInOutBack: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}

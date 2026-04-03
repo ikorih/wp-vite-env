@@ -1,0 +1,10 @@
+:root {
+  /* ===== duration ===== */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 700ms;
+
+  /* ===== ページ遷移 ===== */
+  --transition-out-duration: 0.25s;
+}

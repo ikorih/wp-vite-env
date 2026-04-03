@@ -1,0 +1,11 @@
+:root {
+  /* ===== セクション余白 ===== */
+  --space-section-y: 4.8rem;
+  /* --space-section-y-pc: ; */
+
+  /* ===== コンポーネント間隔 ===== */
+  --space-stack-s: 0.8rem;
+  --space-stack-m: 1.6rem;
+  --space-stack-l: 2.4rem;
+  --space-stack-xl: 4rem;
+}

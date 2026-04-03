@@ -1,0 +1,14 @@
+/* プリミティブカラー — Tailwindユーティリティ (bg-primary, text-secondary 等) を生成 */
+@theme {
+  --color-*: initial;
+
+  /* ブランド */
+  --color-primary: #001a6e;
+  --color-secondary: #074799;
+  --color-tertiary: #009990;
+  --color-quaternary: #e1ffbb;
+
+  /* ベース */
+  --color-black: #000;
+  --color-white: #fff;
+}

@@ -1,0 +1,20 @@
+/* セマンティックカラー — プリミティブを参照し、用途別にエイリアスを定義
+ * 手書きCSS内で var(--color-text-high) のように使用する */
+:root {
+  /* ===== テキスト ===== */
+  --color-text-high: #010101;
+  --color-text-middle: #696969;
+  --color-text-low: #999;
+  --color-text-disabled: #bbb;
+  --color-text-link: #3f4ed8;
+  --color-text-alert: #a64a4a;
+
+  /* ===== 背景 ===== */
+  --color-bg-base: var(--color-white);
+  --color-bg-sub: #f5f5f5;
+
+  /* ===== ボーダー ===== */
+  --color-border-high: #333;
+  --color-border-middle: #ddd;
+  --color-border-low: #eee;
+}

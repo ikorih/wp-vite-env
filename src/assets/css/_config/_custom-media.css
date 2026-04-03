@@ -1,3 +1,5 @@
+/* 手書きCSS用のカスタムメディアクエリ
+ * 値は _tailwind/_breakpoints.css と同期すること */
 @custom-media --media-tablet (min-width: 570px);
 @custom-media --media-pc (min-width: 990px);
 @custom-media --media-widescreen (min-width: 1440px);

@@ -1,0 +1,10 @@
+:root {
+  --header-height: 6.4rem;
+  --scroll-offset: 2.4rem;
+}
+
+@media (--media-pc) {
+  :root {
+    --header-height: 8rem;
+  }
+}

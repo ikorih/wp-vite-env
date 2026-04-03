@@ -1,5 +1,16 @@
 @charset "utf-8";
 
 @import 'tailwindcss';
+@import './_config/_tailwind/_breakpoints.css';
+@import './_config/_tailwind/_spacing.css';
+@import './_config/_tailwind/_typography.css';
+@import './_config/_tailwind/_colors.css';
+@import './_config/_tailwind/_animation.css';
+
 @import './_config/_custom-media.css';
-@import './_config/_theme.css';
+@import './_config/_tokens/_colors.css';
+@import './_config/_tokens/_typography.css';
+@import './_config/_tokens/_spacing.css';
+@import './_config/_tokens/_layout.css';
+@import './_config/_tokens/_animation.css';
+@import './_config/_global-vars.css';
