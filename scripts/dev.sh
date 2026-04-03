@@ -118,9 +118,8 @@ fi
 # 開発サーバー起動（並列実行）
 concurrently \
   --kill-others \
-  --names "img,lint,vite,plugin" \
-  --prefix-colors "yellow,cyan,green,magenta" \
+  --names "img,lint,vite" \
+  --prefix-colors "yellow,cyan,green" \
   "node scripts/watch-images.js" \
   "onchange \"**/*.{php}\" -- npm run lint:php" \
-  "vite" \
-  "node scripts/build-blocks.js --watch"
+  "vite"

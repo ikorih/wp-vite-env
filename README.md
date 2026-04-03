@@ -5,7 +5,6 @@
 WordPress テーマ開発を Vite / Docker / Tailwind CSS v4 で行うための開発環境です。
 
 - **テーマソース**: `src/` で開発 → `release/{PRODUCTION_NAME}/` にビルド
-- **Gutenberg カスタムブロック**: `wordpress/wp-content/plugins/my-custom-block/` で開発
 - **画像最適化**: WebP / AVIF を自動生成
 
 ## 前提条件
