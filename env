@@ -23,6 +23,12 @@ WORDPRESS_DEBUG=true
 WP_MEMORY_LIMIT=256M
 WP_MAX_UPLOAD_SIZE=128M
 
+# WordPress 初期管理者ユーザー（初回起動時に未インストールなら自動作成）
+WP_SITE_TITLE="My Project"
+WP_ADMIN_USER=admin
+WP_ADMIN_PASS=admin
+WP_ADMIN_EMAIL=admin@example.com
+
 # phpMyAdmin
 PMA_PORT=8080
 

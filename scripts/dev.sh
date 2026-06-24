@@ -54,9 +54,11 @@ cleanup() {
 # シグナルをトラップ
 trap cleanup SIGINT SIGTERM EXIT
 
-# 環境変数を読み込み
+# 環境変数を読み込み（値に空白を含む場合に対応するため source 方式）
 if [ -f .env ]; then
-  export $(cat .env | grep -v '^#' | xargs)
+  set -a
+  source .env
+  set +a
 else
   echo -e "${RED}エラー: .env ファイルが見つかりません${NC}"
   echo -e "${YELLOW}cp env .env で作成してください${NC}"
@@ -94,11 +96,28 @@ until curl -s -o /dev/null "http://localhost:${LOCAL_SERVER_PORT}" 2>/dev/null; 
 done
 
 echo -e "${GREEN}WordPress が起動しました${NC}"
+
+# WordPress 初回インストール（未インストールの場合のみ管理者ユーザーを自動作成）
+if ! docker-compose run --rm cli wp core is-installed >/dev/null 2>&1; then
+  echo -e "${YELLOW}WordPress をインストールしています（管理者ユーザーを作成）...${NC}"
+  docker-compose run --rm cli wp core install \
+    --url="http://localhost:${LOCAL_SERVER_PORT}" \
+    --title="${WP_SITE_TITLE:-WordPress}" \
+    --admin_user="${WP_ADMIN_USER:-admin}" \
+    --admin_password="${WP_ADMIN_PASS:-admin}" \
+    --admin_email="${WP_ADMIN_EMAIL:-admin@example.com}" \
+    --skip-email
+  echo -e "${GREEN}管理者ユーザー「${WP_ADMIN_USER:-admin}」を作成しました${NC}"
+else
+  echo -e "${GREEN}WordPress はインストール済みです${NC}"
+fi
+
 echo ""
 echo -e "${GREEN}========================================${NC}"
 echo -e "  ${GREEN}【PC】${NC}"
 echo -e "  開発サイト: ${GREEN}http://localhost:${LOCAL_SERVER_PORT}${NC}"
 echo -e "  管理画面:   ${GREEN}http://localhost:${LOCAL_SERVER_PORT}/wp-admin${NC}"
+echo -e "    ユーザー名: ${GREEN}${WP_ADMIN_USER:-admin}${NC} / パスワード: ${GREEN}${WP_ADMIN_PASS:-admin}${NC}"
 echo -e "  phpMyAdmin: ${GREEN}http://localhost:${PMA_PORT:-8080}${NC}"
 echo -e "${GREEN}----------------------------------------${NC}"
 echo -e "  ${GREEN}【スマホ】${NC}"
