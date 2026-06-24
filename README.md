@@ -75,8 +75,23 @@ npm run wordmove:push:theme
 
 | コマンド | 説明 |
 |----------|------|
-| `npm run db:export` | DB エクスポート |
-| `npm run db:import` | DB インポート |
+| `npm run db:export` | DB エクスポート（`db/mysql/` に出力） |
+| `npm run db:import` | DB インポート（`db/mysql/*.sql` から選択） |
+
+> **注意:** `db/mysql/` は MySQL の初期化ディレクトリ（`/docker-entrypoint-initdb.d`）も兼ねています。`.sql` を置いたまま `npm run destroy` → `npm run dev` すると、空の DB に自動ロードされます。クリーンな状態で起動したい場合は `db/mysql/` の `.sql` を退避してください。
+
+#### 管理者ユーザー
+
+初回起動時、WordPress が未インストールなら `.env` の以下の値で管理者を自動作成します（インストール済みなら何もしません）。
+
+```
+WP_SITE_TITLE="My Project"
+WP_ADMIN_USER=admin
+WP_ADMIN_PASS=admin
+WP_ADMIN_EMAIL=admin@example.com
+```
+
+作成後にパスワードを変更する場合: `npm run wp:cli -- user update admin --user_pass=新パスワード`
 
 ### デプロイ（Wordmove）
 

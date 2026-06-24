@@ -48,8 +48,21 @@ export default defineConfig([
     },
   },
   {
-    // ブラウザグローバルを許可
-    files: ['**/*.{js,mjs,cjs}'],
+    // ブラウザで動くテーマ用 JS（src/assets/js）はブラウザグローバルを許可
+    files: ['src/assets/js/**/*.{js,mjs,cjs}'],
     languageOptions: { globals: globals.browser },
+  },
+  {
+    // Node スクリプト・ビルド設定（process, __dirname など）は Node グローバルを許可
+    files: [
+      'scripts/**/*.{js,mjs,cjs}',
+      'vite-helpers/**/*.{js,mjs,cjs}',
+      '*.config.{js,mjs,cjs}',
+    ],
+    languageOptions: { globals: globals.node },
+    rules: {
+      // Node スクリプトでは進捗ログに console を使うため許可
+      'no-console': 'off',
+    },
   },
 ]);

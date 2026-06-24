@@ -21,7 +21,7 @@
  *  ※ docker-compose v1/v2 どちらでも動作（自動検出）
  */
 
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -39,7 +39,7 @@ if (!MYSQL_USER || !MYSQL_PASS || !MYSQL_NAME) {
 // v2 (docker compose) と v1 (docker-compose) の両方に対応
 const composeCmd = (() => {
   try {
-    require('child_process').execSync('docker compose version', { stdio: 'ignore' });
+    execSync('docker compose version', { stdio: 'ignore' });
     return ['docker', ['compose']];
   } catch {
     return ['docker-compose', []];

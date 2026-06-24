@@ -15,7 +15,8 @@ services:
       - db_data:/var/lib/mysql
       - ./db/mysql:/docker-entrypoint-initdb.d
     ports:
-      - '${LOCAL_SERVER_IP}:${LOCAL_DB_PORT}:3306'
+      # DB はホスト内からのみ接続（既定で 127.0.0.1 バインド。LAN へ公開しない）
+      - '${LOCAL_DB_IP:-127.0.0.1}:${LOCAL_DB_PORT}:3306'
     restart: 'no'
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p${MYSQL_ROOT_PASS}']

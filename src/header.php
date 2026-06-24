@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja" dir="ltr">
+<html <?php language_attributes(); ?> dir="ltr">
   <head prefix="og: http://ogp.me/ns#">
-    <meta charset="UTF-8">
+    <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <?php wp_head(); ?>
   </head>
-  <body>
+  <body <?php body_class(); ?>>
+    <?php wp_body_open(); ?>
     <div class="l-header">
     </div>
 

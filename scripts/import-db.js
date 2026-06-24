@@ -18,11 +18,22 @@
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
 
 // dotenv を使って .env から環境変数を読み込む
 import dotenv from 'dotenv';
 dotenv.config();
+
+// ---- docker compose コマンド検出 ----
+// v2 (docker compose) と v1 (docker-compose) の両方に対応
+const composeCmd = (() => {
+  try {
+    execSync('docker compose version', { stdio: 'ignore' });
+    return ['docker', ['compose']];
+  } catch {
+    return ['docker-compose', []];
+  }
+})();
 
 // 必須環境変数のチェック
 const { MYSQL_USER, MYSQL_PASS, MYSQL_NAME } = process.env;
@@ -76,17 +87,21 @@ rl.question('→ インポートするファイルの番号を入力してくだ
   const fullPath = path.join(dumpDir, selectedFile);
   console.log(`⏳ ${selectedFile} をインポート中...`);
 
-  // docker-compose exec -T database mysql -uUSER -pPASS DBNAME
+  // docker compose exec -T -e MYSQL_PWD=... database mysql -uUSER DBNAME
+  //  - MYSQL_PWD: パスワードを環境変数経由で渡し、ps出力に残さない（mysql の警告も回避）
   const importCmd = [
+    ...composeCmd[1],
     'exec',
     '-T',
+    '-e',
+    `MYSQL_PWD=${MYSQL_PASS}`,
     'database',
     'mysql',
     `-u${MYSQL_USER}`,
-    `-p${MYSQL_PASS}`,
+    '--default-character-set=utf8mb4',
     MYSQL_NAME,
   ];
-  const child = spawn('docker-compose', importCmd, { stdio: ['pipe', 'inherit', 'inherit'] });
+  const child = spawn(composeCmd[0], importCmd, { stdio: ['pipe', 'inherit', 'inherit'] });
 
   // 選択されたファイルを読み込み、stdin に流し込む
   const readStream = fs.createReadStream(fullPath);

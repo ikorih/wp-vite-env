@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "generate-vite-server": "node scripts/generate-vite-server.js",
     "img:gen:dev": "node scripts/generate-images.js --dev",
@@ -10,7 +13,7 @@
     "wp:start:dev": "cross-env THEME_SOURCE=src THEME_IS_DEV=true docker-compose up -d",
     "wp:start:prod": "bash -c 'source .env && THEME_SOURCE=release/$PRODUCTION_NAME THEME_IS_DEV=false docker-compose up -d'",
     "wp:down": "docker-compose down",
-    "wp:restart": "docker-compose down && cross-env THEME_SOURCE=src THEME_IS_DEV=true docker-compose up -d",
+    "wp:restart": "npm run down && npm run dev",
     "wp:destroy": "docker-compose down -v",
     "wp:cli": "docker-compose run --rm cli wp",
     "serve": "vite",

@@ -5,7 +5,7 @@ module.exports = {
   maxMessageLength: 64,
   minMessageLength: 3,
   questions: ['type', 'scope', 'subject', 'body', 'breaking', 'issues', 'lerna'],
-  scopes: ['', 'theme', 'template', 'scss', 'js', 'plugin', 'assets', 'docker', 'gulp'],
+  scopes: ['', 'theme', 'template', 'css', 'js', 'plugin', 'assets', 'docker', 'vite'],
   types: {
     mod: {
       description: '既存機能の変更・改善',
@@ -20,7 +20,7 @@ module.exports = {
       value: 'fix',
     },
     style: {
-      description: 'CSS/SCSSの変更（見た目の調整）',
+      description: 'CSSの変更（見た目の調整）',
       value: 'style',
     },
     markup: {
