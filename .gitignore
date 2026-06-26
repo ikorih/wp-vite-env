@@ -27,10 +27,22 @@ dist-ssr
 src/assets/webp
 src/assets/avif
 
-# 不要なwpプラグイン
-wp/plugins/index.php
-wp/plugins/hello.php
-wp/plugins/akismet
+# -------------------------------------------
+# WordPress 本体（コア）は追跡しない。wp-content 配下のみ追跡する
+# （コアのバージョンは docker-compose.yml の image タグで管理）
+# -------------------------------------------
+/wordpress/*
+!/wordpress/wp-content/
+/wordpress/wp-content/*
+!/wordpress/wp-content/plugins/
+!/wordpress/wp-content/mu-plugins/
+!/wordpress/wp-content/uploads/
+
+# テーマは src/ で開発するため、wp-content/themes 配下（同梱の既定テーマ等）は追跡しない
+# プラグインのうち WordPress 同梱の既定プラグイン・サイレンスファイルは追跡しない
+/wordpress/wp-content/plugins/index.php
+/wordpress/wp-content/plugins/hello.php
+/wordpress/wp-content/plugins/akismet/
 
 # 自動生成されるViteサーバー定義
 /src/config/vite-server-config.php
