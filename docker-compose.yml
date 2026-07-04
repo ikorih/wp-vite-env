@@ -40,6 +40,15 @@ services:
       WP_MEMORY_LIMIT: '${WP_MEMORY_LIMIT}'
       WP_MAX_UPLOAD_SIZE: '${WP_MAX_UPLOAD_SIZE}'
       THEME_IS_DEV: '${THEME_IS_DEV:-true}'
+      # アクセス元ホスト（localhost / LAN IP 等）に追従して WP_HOME/WP_SITEURL を動的化する。
+      # siteurl 固定による他ホストからの 301 リダイレクトを防ぎ、スマホ実機確認を可能にする（dev用）。
+      # docker-compose の変数展開を避けるため PHP の $ は $$ でエスケープ。
+      WORDPRESS_CONFIG_EXTRA: |
+        if (!empty($$_SERVER['HTTP_HOST'])) {
+          $$__scheme = (!empty($$_SERVER['HTTPS']) && $$_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+          define('WP_HOME', $$__scheme . '://' . $$_SERVER['HTTP_HOST']);
+          define('WP_SITEURL', $$__scheme . '://' . $$_SERVER['HTTP_HOST']);
+        }
     volumes:
       - ./wordpress:/var/www/html:delegated
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
