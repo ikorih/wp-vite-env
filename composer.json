@@ -1,0 +1,28 @@
+{
+  "name": "wp-vite-env/site",
+  "description": "WordPress プラグインの依存管理（プロジェクトごとに name / require を変更する）",
+  "type": "project",
+  "license": "proprietary",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+    }
+  ],
+  "require": {
+    "composer/installers": "^2.0"
+  },
+  "extra": {
+    "installer-paths": {
+      "wordpress/wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+      "wordpress/wp-content/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
+      "wordpress/wp-content/themes/{$name}/": ["type:wordpress-theme"]
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
+}

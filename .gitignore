@@ -15,6 +15,9 @@ dist-ssr
 # Vite ビルド成果物（Wordmove でデプロイする一時生成物）
 /release
 
+# Composer 依存（vendor は composer.json/lock から再現）
+/vendor
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -42,10 +45,12 @@ src/assets/avif
 !/wordpress/wp-content/uploads/
 
 # テーマは src/ で開発するため、wp-content/themes 配下（同梱の既定テーマ等）は追跡しない
-# プラグインのうち WordPress 同梱の既定プラグイン・サイレンスファイルは追跡しない
-/wordpress/wp-content/plugins/index.php
-/wordpress/wp-content/plugins/hello.php
-/wordpress/wp-content/plugins/akismet/
+
+# プラグインは既定で追跡しない（無料プラグインは Composer=composer.json/lock で管理・再現）
+/wordpress/wp-content/plugins/*
+!/wordpress/wp-content/plugins/.gitkeep
+# 有料/手動管理プラグインだけ個別に追跡する（設置ごとに1行ずつ追加）
+# 例: !/wordpress/wp-content/plugins/advanced-custom-fields-pro/
 
 # 自動生成されるViteサーバー定義
 /src/config/vite-server-config.php

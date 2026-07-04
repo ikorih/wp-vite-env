@@ -93,6 +93,23 @@ WP_ADMIN_EMAIL=admin@example.com
 
 作成後にパスワードを変更する場合: `npm run wp:cli -- user update admin --user_pass=新パスワード`
 
+### プラグイン管理
+
+「どのプラグインをどのバージョンで使うか」を追跡するため、**無料は Composer 管理・有料は手動設置**のハイブリッド構成です（`composer` は公式 Docker イメージ経由で実行するのでホストへのインストール不要）。
+
+| コマンド | 説明 |
+|----------|------|
+| `npm run plugins:install` | `composer.lock` どおりに無料プラグインを再現インストール |
+| `npm run plugins:update` | 更新して `composer.lock` を更新 |
+| `npm run composer -- require wpackagist-plugin/<slug>:<ver>` | 無料プラグインを追加 |
+
+- **無料プラグイン**: `composer.json` に宣言し `composer.lock` でバージョン固定。実体は git 追跡しない（`composer.json` / `composer.lock` だけ追跡）。
+- **有料/手動プラグイン**: `wordpress/wp-content/plugins/` に手動配置し、`.gitignore` に次の1行を足して実体を追跡する。
+
+  ```gitignore
+  !/wordpress/wp-content/plugins/<プラグインディレクトリ名>/
+  ```
+
 ### デプロイ（Wordmove）
 
 | コマンド | 説明 |

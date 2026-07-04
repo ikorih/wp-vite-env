@@ -4,6 +4,9 @@
     "node": ">=20"
   },
   "scripts": {
+    "composer": "docker run --rm --volume \"$PWD\":/app -e COMPOSER_HOME=/tmp --user \"$(id -u):$(id -g)\" composer:2",
+    "plugins:install": "npm run composer -- install",
+    "plugins:update": "npm run composer -- update",
     "generate-vite-server": "node scripts/generate-vite-server.js",
     "img:gen:dev": "node scripts/generate-images.js --dev",
     "img:gen:prod": "node scripts/generate-images.js --prod",
