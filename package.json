@@ -38,15 +38,17 @@
     "wordmove:pull:all": "bash -c 'source .env && THEME_SOURCE=release/$PRODUCTION_NAME docker-compose run --rm wordmove wordmove pull -e production --all'"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@markuplint/mustache-parser": "^4.6.19",
     "@markuplint/php-parser": "^4.6.19",
     "chokidar": "^5.0.0",
     "concurrently": "^9.2.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.6.1",
-    "eslint": "^9.30.1",
+    "eslint": "^10.6.0",
     "fs-extra": "^11.3.3",
     "glob": "^11.0.3",
+    "globals": "^17.7.0",
     "markuplint": "^4.12.0",
     "onchange": "^7.1.0",
     "postcss-preset-env": "^10.2.4",
