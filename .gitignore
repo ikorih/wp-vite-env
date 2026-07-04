@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Vite ビルド成果物（Wordmove でデプロイする一時生成物）
+/release
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
