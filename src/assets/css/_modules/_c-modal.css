@@ -1,0 +1,199 @@
+/* =====================================================
+ * c-modal — <dialog> ベースの汎用モーダル
+ *
+ * JS（modal-ui.js）が body 直下に 1 つだけ生成し、
+ * [data-modal] トリガーのクリックで showModal() する。
+ * 表示/非表示のアニメーションは @starting-style + allow-discrete による
+ * ネイティブ <dialog> トランジション。
+ * ================================================== */
+.c-modal {
+  /* dialog の既定スタイルをリセット */
+  margin: auto; /* 画面中央寄せ */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-white);
+  inline-size: min(112rem, calc(100vw - 4rem));
+  max-block-size: calc(100dvh - 4rem);
+  overflow: visible;
+
+  /* 幅バリエーション（data-modal-size で付与）。既定は動画向けのワイド */
+  &.-size-s {
+    inline-size: min(48rem, calc(100vw - 4rem));
+  }
+  &.-size-m {
+    inline-size: min(72rem, calc(100vw - 4rem));
+  }
+  &.-size-l {
+    inline-size: min(96rem, calc(100vw - 4rem));
+  }
+
+  /* 開閉アニメーション（閉じている状態を基準に定義） */
+  opacity: 0;
+  translate: 0 1.2rem;
+  scale: 0.98;
+  transition:
+    opacity 0.3s ease,
+    translate 0.3s ease,
+    scale 0.3s ease,
+    overlay 0.3s ease allow-discrete,
+    display 0.3s ease allow-discrete;
+
+  &[open] {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+
+  /* 開いた瞬間の開始値（enter アニメーション） */
+  @starting-style {
+    &[open] {
+      opacity: 0;
+      translate: 0 1.2rem;
+      scale: 0.98;
+    }
+  }
+
+  /* ===== 背景（backdrop） ===== */
+  &::backdrop {
+    background: rgb(1 1 1 / 0.72);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      overlay 0.3s ease allow-discrete,
+      display 0.3s ease allow-discrete;
+  }
+  &[open]::backdrop {
+    opacity: 1;
+  }
+  @starting-style {
+    &[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* ===== 内側ラッパー ===== */
+  .c-modal__inner {
+    position: relative;
+    inline-size: 100%;
+  }
+
+  /* ===== 本文 ===== */
+  .c-modal__body {
+    inline-size: 100%;
+  }
+
+  /* ===== メディア枠（YouTube / Vimeo / video）— 16:9 ===== */
+  .c-modal__media {
+    position: relative;
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--color-black);
+    border-radius: var(--radius-m);
+    overflow: clip;
+    box-shadow: 0 2.4rem 6.4rem rgb(0 0 0 / 0.5);
+  }
+  .c-modal__media iframe,
+  .c-modal__media video {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    border: 0;
+  }
+
+  /* ===== 画像 ===== */
+  .c-modal__img {
+    display: block;
+    inline-size: auto;
+    max-inline-size: 100%;
+    max-block-size: calc(100dvh - 4rem);
+    margin-inline: auto;
+    border-radius: var(--radius-m);
+    box-shadow: 0 2.4rem 6.4rem rgb(0 0 0 / 0.5);
+  }
+
+  /* ===== インライン差し込みコンテンツ ===== */
+  .c-modal__content {
+    inline-size: 100%;
+    max-block-size: calc(100dvh - 4rem);
+    overflow-y: auto;
+    padding: 3.2rem;
+    color: var(--color-text-high);
+    background: var(--color-bg-base);
+    border-radius: var(--radius-l);
+    box-shadow: 0 2.4rem 6.4rem rgb(0 0 0 / 0.5);
+    overscroll-behavior: contain;
+  }
+
+  /* ===== 閉じるボタン ===== */
+  .c-modal__close {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: 0.8rem;
+    inset-inline-end: 0.8rem;
+    inline-size: 4.4rem;
+    block-size: 4.4rem;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 0.5);
+    border-radius: var(--radius-full);
+    background: rgb(0 0 0 / 0.4);
+    color: var(--color-white);
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+
+    /* PC は枠の外・右上へ */
+    @media (--media-pc) {
+      inset-block-start: 0;
+      inset-inline-end: 0;
+      translate: 50% -50%;
+    }
+
+    .mouse-is-active &:hover,
+    .touch-is-active &.touched,
+    &:focus-visible {
+      background: rgb(0 0 0 / 0.7);
+      border-color: var(--color-white);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-white);
+      outline-offset: 2px;
+    }
+
+    /* × アイコン（疑似要素で描画） */
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inline-size: 1.8rem;
+      block-size: 2px;
+      background: currentColor;
+      border-radius: 2px;
+    }
+    &::before {
+      rotate: 45deg;
+    }
+    &::after {
+      rotate: -45deg;
+    }
+  }
+}
+
+/* モーダル表示中は背面スクロールを抑止 */
+html.is-modal-open,
+html.is-modal-open body {
+  overflow: hidden;
+}
+
+/* モーション低減設定を尊重 */
+@media (prefers-reduced-motion: reduce) {
+  .c-modal,
+  .c-modal::backdrop {
+    transition-duration: 0.01ms;
+  }
+}
