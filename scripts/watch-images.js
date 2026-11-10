@@ -11,12 +11,17 @@ import { spawn } from 'child_process';
 import fs from 'fs-extra';
 import path from 'path';
 
-// 監視対象パターン
-const watchPattern = 'src/assets/img/**/*.{jpg,jpeg,png}';
+// 監視対象ディレクトリと対象拡張子
+// chokidar は v4 以降で glob パターン（**/*.{jpg,...}）を廃止したため、
+// ディレクトリを監視しつつ ignored 関数で拡張子を絞り込む方式を使う。
+const watchDir = 'src/assets/img';
+const imageExtRe = /\.(jpe?g|png)$/i;
 
 // chokidar でファイルを監視
-const watcher = watch(watchPattern, {
+const watcher = watch(watchDir, {
   ignoreInitial: true,
+  // ファイルかつ対象拡張子以外は無視（ディレクトリは監視して再帰的にたどる）
+  ignored: (targetPath, stats) => Boolean(stats?.isFile() && !imageExtRe.test(targetPath)),
 });
 
 async function removeDerivedFiles(srcPath) {
@@ -58,4 +63,4 @@ watcher
   .on('change', (file) => generateSingle(file))
   .on('unlink', (file) => removeDerivedFiles(file));
 
-console.log(`👀 [watch-images] ${watchPattern} を監視中...`);
+console.log(`👀 [watch-images] ${watchDir} 配下の画像(jpg/jpeg/png)を監視中...`);
