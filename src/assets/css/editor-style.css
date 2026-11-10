@@ -14,3 +14,22 @@
 @import './_config/_tokens/_layout.css';
 @import './_config/_tokens/_animation.css';
 @import './_config/_global-vars.css';
+
+/* ルート font-size（rem 基準）をフロントと揃える */
+@import './_base/_root-font-size.css';
+
+/* =====================================================
+* Editor base — 編集キャンバス(iframe)の本文をフロントに合わせる
+* Gutenberg は .editor-styles-wrapper に独自フォントを当てるため明示的に上書き。
+* ================================================== */
+.editor-styles-wrapper {
+  font-family: var(--font-sans);
+}
+
+/* rem 基準を 62.5%(10px) に合わせた影響で、WP 既定UI（投稿タイトル等）が縮むため補正。
+   ※ここはエディタUIの見た目のみ。フロント出力には無関係。 */
+.editor-post-title__input,
+.wp-block-post-title {
+  font-size: 3.2rem;
+  line-height: 1.4;
+}

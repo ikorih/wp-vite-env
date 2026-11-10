@@ -1,13 +1,26 @@
 <?php
-add_action('enqueue_block_editor_assets', function () {
+// エディタスタイル。
+// WP 6.3+ の編集キャンバスは iframe のため、enqueue_block_editor_assets だと
+// キャンバス内に届かない。enqueue_block_assets（＝ブロック描画コンテキスト共通・
+// エディタでは iframe 内に読み込まれる）を使い、フロントでの二重読み込みは is_admin で除外する。
+add_action('enqueue_block_assets', function () {
+  // フロントは style.css 側で読むのでここでは不要。エディタ（管理画面）だけに限定。
+  if (!is_admin()) {
+    return;
+  }
+
   if (THEME_IS_DEV) {
     // 開発環境：Vite Dev Server の CSS を直接読み込み
     wp_enqueue_style('editor-style', THEME_VITE_SERVER . '/' . THEME_EDITOR_CSS, [], null);
   } else {
-    // 本番環境
-    $file_css = get_template_directory_uri() . '/' . THEME_EDITOR_CSS;
-    wp_enqueue_style( 'editor-style', $file_css, array( 'wp-edit-blocks' ) );
+    // 本番環境：manifest からハッシュ付きファイルを解決
+    $css_file = function_exists('get_vite_asset') ? get_vite_asset(THEME_EDITOR_CSS) : null;
+    if ($css_file) {
+      wp_enqueue_style('editor-style', THEME_DIST_URI . '/' . $css_file, [], null);
+    }
   }
+
+  // エディタキャンバス(iframe)でも本文フォントを読み込む
   wp_enqueue_style('google-font', 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
 });
 

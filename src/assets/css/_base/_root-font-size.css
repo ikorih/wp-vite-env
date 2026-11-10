@@ -1,0 +1,18 @@
+/* =====================================================
+ * ルート font-size（rem の基準）
+ * フロント（style.css）・エディタ（editor-style.css）の両方から読み込む。
+ * ここを唯一のソースにして rem 基準を揃える。
+ * ================================================== */
+html {
+  font-size: calc(100 / 390 * 10vw);
+
+  @media (--media-tablet) {
+    font-size: 91%;
+  }
+  @media (--media-pc) {
+    font-size: calc(100 / 1440 * 10vw);
+  }
+  @media (--media-widescreen) {
+    font-size: 62.5%;
+  }
+}

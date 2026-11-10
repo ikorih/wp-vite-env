@@ -7,14 +7,5 @@ html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  font-size: calc(100 / 390 * 10vw);
-  @media (--media-tablet) {
-    font-size: 91%;
-  }
-  @media (--media-pc) {
-    font-size: calc(100 / 1440 * 10vw);
-  }
-  @media (--media-widescreen) {
-    font-size: 62.5%;
-  }
+  /* font-size（rem 基準）は _base/_root-font-size.css に切り出し（フロント/エディタ共通） */
 }
