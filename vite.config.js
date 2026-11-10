@@ -32,10 +32,13 @@ export default defineConfig({
     copyStaticPlugin({
       targets: [
         { src: 'src/**/*.php', dest: '', ignore: ['**/vite-server-config.php'] },
+        // wp-scripts がビルドしたブロック（js/json/css/php/asset.php）を release へ
+        { src: 'src/blocks/**/*', dest: 'blocks' },
         { src: 'src/assets/img/**/*', dest: 'assets/img' },
         { src: 'src/assets/webp/**/*', dest: 'assets/webp' },
         { src: 'src/assets/avif/**/*', dest: 'assets/avif' },
         { src: 'src/style.css', dest: '' },
+        { src: 'src/theme.json', dest: '' },
       ],
     }),
     imageOptimizerPlugin({

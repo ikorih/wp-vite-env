@@ -21,3 +21,9 @@ require_once __DIR__ . '/inc/setup.php';
   - ブロックエディターにカスタムCSSを有効化
 */
 require_once __DIR__ . '/inc/gutenberg.php';
+
+/*
+    inc/blocks.php
+  - blocks/ 以下のカスタムブロックを自動登録（動的ネイティブ）
+*/
+require_once __DIR__ . '/inc/blocks.php';

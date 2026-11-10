@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "layout": {
+      "contentSize": "980px",
+      "wideSize": "980px"
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": false,
+      "units": ["px", "rem", "em", "%", "vw", "vh"]
+    }
+  }
+}

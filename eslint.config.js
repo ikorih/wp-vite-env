@@ -53,6 +53,14 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   {
+    // Gutenberg ブロックのエディタ JS（blocks/）は JSX を含むため構文を許可
+    files: ['blocks/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+  },
+  {
     // Node スクリプト・ビルド設定（process, __dirname など）は Node グローバルを許可
     files: [
       'scripts/**/*.{js,mjs,cjs}',

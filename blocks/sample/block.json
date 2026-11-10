@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "theme/sample",
+  "version": "1.0.0",
+  "title": "サンプル（動的）",
+  "category": "theme",
+  "icon": "star-filled",
+  "description": "動的ネイティブブロックの雛形。フロントは render.php が描画する。namespace(theme/) はプロジェクトに合わせて変更する。",
+  "keywords": ["sample", "サンプル"],
+  "textdomain": "theme",
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

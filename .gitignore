@@ -15,6 +15,9 @@ dist-ssr
 # Vite ビルド成果物（Wordmove でデプロイする一時生成物）
 /release
 
+# ブロックのビルド出力（ソースは /blocks。wp-scripts が出力）
+/src/blocks
+
 # Composer 依存（vendor は composer.json/lock から再現）
 /vendor
 
